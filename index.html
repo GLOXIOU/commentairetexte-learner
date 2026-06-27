@@ -5,73 +5,219 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>CommentaireTexte Learner</title>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="top">
-    <div class="top-left">
-      <h1>CommentaireTexte</h1>
-      <p class="muted">Réviser vos commentaires de texte — style Duolingo</p>
-    </div>
-    <div class="top-right" id="top-right">
-      <div class="streak small" id="streak-small" title="Streak">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2C12 2 7 6 7 10C7 13.866 9.686 16 12 18C14.314 16 17 13.866 17 10C17 6 12 2 12 2Z" fill="#FF3B30"/>
-        </svg>
-        <span id="streak-count-header">0</span>
-      </div>
-    </div>
-  </header>
 
-  <main class="container">
-    <!-- Drop area shown when no lessons loaded -->
-    <div id="drop-area" class="drop-area">
+  <!-- ÉCRAN D'ACCUEIL -->
+  <main id="landing-ui" class="landing-container">
+    <div class="landing-content">
+      <h1 class="landing-title">CommentaireTexte</h1>
+      <p class="landing-subtitle">Mémorise tes lectures analytiques de manière active et infinie.</p>
+      
+      <div class="instructions">
+        <h2>Comment préparer tes dossiers ?</h2>
+        <p>Glisse et dépose un dossier contenant des paires de fichiers (texte + questions).</p>
+        <div class="file-example">
+          <div class="file-box">
+            <strong>📄 l1.pdf (ou .png)</strong>
+            <span>Ton texte à étudier</span>
+          </div>
+          <div class="file-box">
+            <strong>📝 l1.json (ou .txt)</strong>
+            <span>Tes questions/réponses</span>
+          </div>
+        </div>
+        <p>Format du fichier texte attendu :</p>
+        <pre><code>- Problématique :
+En quoi ce poème montre-t-il la condition du poète ?
+
+- Grand 1 :
+L'allégorie de l'albatros.</code></pre>
+      </div>
+
       <label class="dropzone" id="dropzone">
         <input id="dir-input" type="file" webkitdirectory directory multiple />
         <div class="dz-inner">
-          <div class="dz-title">Déposer un dossier de leçons</div>
-          <div class="dz-sub">Chaque dossier: l1.png|jpg|pdf et l1.json</div>
-          <div class="dz-hint">(ou cliquer pour sélectionner)</div>
+          <div class="dz-icon">📂</div>
+          <div class="dz-title">Glisse ton dossier ici</div>
+          <div class="dz-sub">ou clique pour parcourir</div>
         </div>
       </label>
-      <div id="summary" class="summary">Prêt à importer</div>
+      <div id="summary" class="summary"></div>
     </div>
-
-    <!-- Lesson view -->
-    <section class="lesson" id="lesson" hidden>
-      <div class="card">
-        <div class="preview" id="preview"></div>
-        <div class="card-body">
-          <div class="meta-row">
-            <div class="meta" id="meta"></div>
-            <div class="progress-text" id="progress-text">0 / 0</div>
-          </div>
-          <div class="question" id="question">Question</div>
-          <textarea id="answer" placeholder="Écrire votre réponse ici..."></textarea>
-          <div class="controls">
-            <button id="skip" class="btn ghost">Passer</button>
-            <button id="check" class="btn outline">Vérifier</button>
-            <button id="next" class="btn primary">Suivant</button>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
 
-  <footer class="bottom">
-    <div class="streak" id="streak" title="Streak">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2C12 2 7 6 7 10C7 13.866 9.686 16 12 18C14.314 16 17 13.866 17 10C17 6 12 2 12 2Z" fill="#FF3B30"/>
-      </svg>
-      <span id="streak-count">0</span>
-    </div>
-    <div class="progress-wrap">
-      <div class="progress-pill" id="progress-pill" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-        <div class="progress-fill" id="progress-fill"></div>
+  <!-- MODAL SÉLECTION MODE DE JEU -->
+  <div id="mode-modal" class="modal-overlay hidden">
+    <div class="modal-box mode-modal-box">
+      <h2 class="modal-title">🎮 Choisir un mode</h2>
+      <p class="modal-sub">Comment veux-tu réviser aujourd'hui ?</p>
+      <div class="mode-grid">
+        <button class="mode-card" data-mode="classic">
+          <div class="mode-icon">✍️</div>
+          <div class="mode-name">Classique</div>
+          <div class="mode-desc">Réponds librement, compare avec la réponse attendue</div>
+        </button>
+        <button class="mode-card" data-mode="timed">
+          <div class="mode-icon">⏱️</div>
+          <div class="mode-name">Contre la montre</div>
+          <div class="mode-desc">30 secondes par question — garde le rythme !</div>
+        </button>
+        <button class="mode-card" data-mode="flashcard">
+          <div class="mode-icon">🃏</div>
+          <div class="mode-name">Flashcard</div>
+          <div class="mode-desc">Vois la question, révèle la réponse en un clic</div>
+        </button>
+        <button class="mode-card" data-mode="blitz">
+          <div class="mode-icon">⚡</div>
+          <div class="mode-name">Blitz</div>
+          <div class="mode-desc">Chrono global de 5 min — réponds à un maximum</div>
+        </button>
       </div>
     </div>
-  </footer>
+  </div>
+
+  <!-- MODAL CONFIRMATION INSPECT JSON -->
+  <div id="confirm-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-icon">🔍</div>
+      <h2 class="modal-title">Inspecter les données ?</h2>
+      <p class="modal-body">Tu vas voir toutes les questions/réponses chargées pour chaque dossier. Utile pour vérifier que les fichiers ont bien été importés.</p>
+      <div class="modal-actions">
+        <button id="confirm-cancel" class="btn ghost">Annuler</button>
+        <button id="confirm-ok" class="btn primary">Voir les données →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL INSPECTEUR JSON -->
+  <div id="inspector-modal" class="modal-overlay hidden">
+    <div class="modal-box inspector-box">
+      <div class="inspector-header">
+        <h2 class="modal-title">📋 Données importées</h2>
+        <button id="inspector-close" class="btn ghost btn-sm">✕ Fermer</button>
+      </div>
+      <div id="inspector-content" class="inspector-content"></div>
+    </div>
+  </div>
+
+  <!-- MODAL FIN BLITZ -->
+  <div id="blitz-end-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-icon">🏆</div>
+      <h2 class="modal-title">Temps écoulé !</h2>
+      <p class="modal-body" id="blitz-result-text"></p>
+      <div class="modal-actions">
+        <button id="blitz-restart" class="btn primary">Rejouer</button>
+        <button id="blitz-change-mode" class="btn ghost">Changer de mode</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERFACE DE RÉVISION (Masquée au début) -->
+  <div id="app-ui" class="app-ui hidden">
+    <header class="top">
+      <div class="top-left">
+        <h1>CommentaireTexte</h1>
+        <div class="mode-badge" id="mode-badge"></div>
+      </div>
+      <div class="top-right">
+        <!-- Timer affiché seulement si mode timed / blitz -->
+        <div class="timer-wrap hidden" id="timer-wrap">
+          <svg viewBox="0 0 36 36" class="timer-svg" id="timer-svg">
+            <circle cx="18" cy="18" r="15.9" fill="none" stroke="#e5e5e5" stroke-width="3"/>
+            <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--duo-green)" stroke-width="3"
+              stroke-dasharray="100 100" stroke-dashoffset="0"
+              stroke-linecap="round" transform="rotate(-90 18 18)"
+              id="timer-circle"/>
+          </svg>
+          <span id="timer-text" class="timer-text">30</span>
+        </div>
+
+        <!-- Streak -->
+        <div class="streak small" id="streak-small" title="Série de bonnes réponses">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="flameGrad" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FFAD00"/>
+                <stop offset="100%" stop-color="#FF3B30"/>
+              </linearGradient>
+            </defs>
+            <path d="M12 2C12 2 6 7 6 13C6 16.3137 8.68629 19 12 19C15.3137 19 18 16.3137 18 13C18 7 12 2 12 2Z" fill="url(#flameGrad)"/>
+            <path class="flame-inner" d="M12 8.5C12 8.5 9.5 11.5 9.5 14C9.5 15.3807 10.6193 16.5 12 16.5C13.3807 16.5 14.5 15.3807 14.5 14C14.5 11.5 12 8.5 12 8.5Z" fill="#FFD600"/>
+          </svg>
+          <span id="streak-count-header">0</span>
+        </div>
+
+        <!-- Bouton inspecteur -->
+        <button id="inspect-btn" class="btn ghost btn-sm" title="Inspecter les données JSON">🔍 Données</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="lesson" id="lesson">
+        <div class="card">
+          <div class="preview" id="preview"></div>
+          <div class="card-body">
+            <div class="meta-row">
+              <div class="meta" id="meta"></div>
+            </div>
+            <div class="question" id="question"></div>
+
+            <!-- Zone réponse : classique / timed -->
+            <div id="write-zone">
+              <textarea id="answer" placeholder="Écris ta réponse ici…"></textarea>
+            </div>
+
+            <!-- Zone flashcard -->
+            <div id="flashcard-zone" class="hidden">
+              <div class="flashcard-reveal" id="flashcard-reveal">
+                <button id="reveal-btn" class="reveal-btn">👁 Révéler la réponse</button>
+                <p id="flashcard-answer" class="flashcard-answer hidden"></p>
+              </div>
+            </div>
+
+            <div class="feedback" id="feedback" hidden>
+              <strong>Réponse attendue :</strong>
+              <p id="expected-answer"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bottom">
+      <div class="bottom-content">
+        <div class="progress-wrap">
+          <!-- Blitz : chrono global -->
+          <div id="blitz-bar-wrap" class="hidden">
+            <div class="blitz-label" id="blitz-label">5:00</div>
+            <div class="progress-pill blitz-pill">
+              <div class="progress-fill blitz-fill" id="blitz-fill">
+                <div class="progress-highlight"></div>
+              </div>
+            </div>
+          </div>
+          <!-- Progress normal -->
+          <div id="normal-bar-wrap">
+            <div class="progress-pill" role="progressbar">
+              <div class="progress-fill" id="progress-fill">
+                <div class="progress-highlight"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="controls">
+          <button id="change-mode-btn" class="btn ghost btn-sm">🎮 Mode</button>
+          <button id="skip" class="btn ghost">Passer</button>
+          <button id="check" class="btn primary">Vérifier</button>
+          <button id="next" class="btn primary" hidden>Continuer</button>
+        </div>
+      </div>
+    </footer>
+  </div>
 
 <script src="app.js"></script>
 </body>
