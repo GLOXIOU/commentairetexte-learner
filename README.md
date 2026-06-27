@@ -8,11 +8,12 @@ Application web pour Duolingo Like qui permet de révisé le bac de français en
 
 ## ✨ Fonctionnalités principales
 
-* Import de dossiers via sélecteur (webkitdirectory) ou glisser-déposer
-* Aperçu image/PDF de la leçon
-* Lecture du JSON (format standard ou fallback lignes) et génération de questions
+* Import de dossiers via sélecteur ou glisser-déposer
+* Aperçu image/PDF de la lecture linéaire
+* Lecture du JSON et génération de questions
 * Interface en cartes, responsive et mobile-friendly
 * Barre de progression verte arrondie en bas et indicateur de streak animé
+* 4 modes d'apprentissage, classique; contre la montre; flashcard; blitz
 
 ---
 
@@ -25,14 +26,13 @@ Pour une leçon "l1" (exemple) :
 
 ```json
 {
-  "Problématique": "Analyser...",
-  "Registre littéraire": "Lyrique",
-  "Grand 1": "Première partie...",
-  "Grand 2": "Deuxième partie..."
+  "Mouvement littéraire": "...",
+  "Problématique": "...",
+  "Grand 1": "...",
+  "Grand 2": "...",
+  "Grand 3": "..."
 }
 ```
-
-Le parser accepte aussi un fichier texte avec une clé par ligne (fallback simple).
 
 ---
 
