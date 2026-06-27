@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CommentaireTexte Learner</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="top-left">
+      <h1>CommentaireTexte</h1>
+      <p class="muted">Réviser vos commentaires de texte — style Duolingo</p>
+    </div>
+    <div class="top-right" id="top-right">
+      <div class="streak small" id="streak-small" title="Streak">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C12 2 7 6 7 10C7 13.866 9.686 16 12 18C14.314 16 17 13.866 17 10C17 6 12 2 12 2Z" fill="#FF3B30"/>
+        </svg>
+        <span id="streak-count-header">0</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Drop area shown when no lessons loaded -->
+    <div id="drop-area" class="drop-area">
+      <label class="dropzone" id="dropzone">
+        <input id="dir-input" type="file" webkitdirectory directory multiple />
+        <div class="dz-inner">
+          <div class="dz-title">Déposer un dossier de leçons</div>
+          <div class="dz-sub">Chaque dossier: l1.png|jpg|pdf et l1.json</div>
+          <div class="dz-hint">(ou cliquer pour sélectionner)</div>
+        </div>
+      </label>
+      <div id="summary" class="summary">Prêt à importer</div>
+    </div>
+
+    <!-- Lesson view -->
+    <section class="lesson" id="lesson" hidden>
+      <div class="card">
+        <div class="preview" id="preview"></div>
+        <div class="card-body">
+          <div class="meta-row">
+            <div class="meta" id="meta"></div>
+            <div class="progress-text" id="progress-text">0 / 0</div>
+          </div>
+          <div class="question" id="question">Question</div>
+          <textarea id="answer" placeholder="Écrire votre réponse ici..."></textarea>
+          <div class="controls">
+            <button id="skip" class="btn ghost">Passer</button>
+            <button id="check" class="btn outline">Vérifier</button>
+            <button id="next" class="btn primary">Suivant</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bottom">
+    <div class="streak" id="streak" title="Streak">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C12 2 7 6 7 10C7 13.866 9.686 16 12 18C14.314 16 17 13.866 17 10C17 6 12 2 12 2Z" fill="#FF3B30"/>
+      </svg>
+      <span id="streak-count">0</span>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-pill" id="progress-pill" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+  </footer>
+
+<script src="app.js"></script>
+</body>
+</html>
