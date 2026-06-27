@@ -1,6 +1,6 @@
 # CommentaireTexte Learner
 
-**Prototype — UI inspirée de Duolingo**
+**Web App d'apprentissage - Duolingo Like**
 
 Application web pour Duolingo Like qui permet de révisé le bac de français en important photo/fichier json contenant probblématique, registre littéraire, ainsi que partie de dévellopement.
 
