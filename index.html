@@ -10,7 +10,6 @@
 </head>
 <body>
 
-  <!-- ÉCRAN D'ACCUEIL -->
   <main id="landing-ui" class="landing-container">
     <div class="landing-content">
       <h1 class="landing-title">CommentaireTexte</h1>
@@ -49,7 +48,6 @@ L'allégorie de l'albatros.</code></pre>
     </div>
   </main>
 
-  <!-- MODAL SÉLECTION MODE DE JEU -->
   <div id="mode-modal" class="modal-overlay hidden">
     <div class="modal-box mode-modal-box">
       <h2 class="modal-title">🎮 Choisir un mode</h2>
@@ -79,7 +77,6 @@ L'allégorie de l'albatros.</code></pre>
     </div>
   </div>
 
-  <!-- MODAL CONFIRMATION INSPECT JSON -->
   <div id="confirm-modal" class="modal-overlay hidden">
     <div class="modal-box">
       <div class="modal-icon">🔍</div>
@@ -92,7 +89,6 @@ L'allégorie de l'albatros.</code></pre>
     </div>
   </div>
 
-  <!-- MODAL INSPECTEUR JSON -->
   <div id="inspector-modal" class="modal-overlay hidden">
     <div class="modal-box inspector-box">
       <div class="inspector-header">
@@ -103,7 +99,6 @@ L'allégorie de l'albatros.</code></pre>
     </div>
   </div>
 
-  <!-- MODAL FIN BLITZ -->
   <div id="blitz-end-modal" class="modal-overlay hidden">
     <div class="modal-box">
       <div class="modal-icon">🏆</div>
@@ -116,7 +111,6 @@ L'allégorie de l'albatros.</code></pre>
     </div>
   </div>
 
-  <!-- INTERFACE DE RÉVISION (Masquée au début) -->
   <div id="app-ui" class="app-ui hidden">
     <header class="top">
       <div class="top-left">
@@ -124,7 +118,6 @@ L'allégorie de l'albatros.</code></pre>
         <div class="mode-badge" id="mode-badge"></div>
       </div>
       <div class="top-right">
-        <!-- Timer affiché seulement si mode timed / blitz -->
         <div class="timer-wrap hidden" id="timer-wrap">
           <svg viewBox="0 0 36 36" class="timer-svg" id="timer-svg">
             <circle cx="18" cy="18" r="15.9" fill="none" stroke="#e5e5e5" stroke-width="3"/>
@@ -136,7 +129,6 @@ L'allégorie de l'albatros.</code></pre>
           <span id="timer-text" class="timer-text">30</span>
         </div>
 
-        <!-- Streak -->
         <div class="streak small" id="streak-small" title="Série de bonnes réponses">
           <svg viewBox="0 0 24 24" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -151,7 +143,6 @@ L'allégorie de l'albatros.</code></pre>
           <span id="streak-count-header">0</span>
         </div>
 
-        <!-- Bouton inspecteur -->
         <button id="inspect-btn" class="btn ghost btn-sm" title="Inspecter les données JSON">🔍 Données</button>
       </div>
     </header>
@@ -166,12 +157,10 @@ L'allégorie de l'albatros.</code></pre>
             </div>
             <div class="question" id="question"></div>
 
-            <!-- Zone réponse : classique / timed -->
             <div id="write-zone">
               <textarea id="answer" placeholder="Écris ta réponse ici…"></textarea>
             </div>
 
-            <!-- Zone flashcard -->
             <div id="flashcard-zone" class="hidden">
               <div class="flashcard-reveal" id="flashcard-reveal">
                 <button id="reveal-btn" class="reveal-btn">👁 Révéler la réponse</button>
@@ -191,7 +180,6 @@ L'allégorie de l'albatros.</code></pre>
     <footer class="bottom">
       <div class="bottom-content">
         <div class="progress-wrap">
-          <!-- Blitz : chrono global -->
           <div id="blitz-bar-wrap" class="hidden">
             <div class="blitz-label" id="blitz-label">5:00</div>
             <div class="progress-pill blitz-pill">
@@ -200,7 +188,6 @@ L'allégorie de l'albatros.</code></pre>
               </div>
             </div>
           </div>
-          <!-- Progress normal -->
           <div id="normal-bar-wrap">
             <div class="progress-pill" role="progressbar">
               <div class="progress-fill" id="progress-fill">

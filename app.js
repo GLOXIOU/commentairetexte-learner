@@ -18,25 +18,21 @@ const expectedAnswer   = document.getElementById('expected-answer');
 const modeBadge        = document.getElementById('mode-badge');
 const changeModeBtn    = document.getElementById('change-mode-btn');
 
-// Write / flashcard zones
 const writeZone      = document.getElementById('write-zone');
 const flashcardZone  = document.getElementById('flashcard-zone');
 const revealBtn      = document.getElementById('reveal-btn');
 const flashcardAns   = document.getElementById('flashcard-answer');
 
-// Timer elements
 const timerWrap   = document.getElementById('timer-wrap');
 const timerText   = document.getElementById('timer-text');
 const timerCircle = document.getElementById('timer-circle');
 
-// Blitz bar
 const blitzBarWrap  = document.getElementById('blitz-bar-wrap');
 const normalBarWrap = document.getElementById('normal-bar-wrap');
 const blitzFill     = document.getElementById('blitz-fill');
 const blitzLabel    = document.getElementById('blitz-label');
 const blitzPill     = blitzFill ? blitzFill.closest('.progress-pill') : null;
 
-// Modals
 const modeModal       = document.getElementById('mode-modal');
 const confirmModal    = document.getElementById('confirm-modal');
 const inspectorModal  = document.getElementById('inspector-modal');
@@ -44,30 +40,24 @@ const inspectorContent= document.getElementById('inspector-content');
 const blitzEndModal   = document.getElementById('blitz-end-modal');
 const blitzResultText = document.getElementById('blitz-result-text');
 
-// --- State ---
 let lessons       = [];
 let flatQuestions = [];
 let currentIndex  = 0;
 let streak        = 0;
 let sessionTotal  = 0;
 let answeredCount = 0;
-let currentMode   = 'classic'; // classic | timed | flashcard | blitz
+let currentMode   = 'classic';
 
-// Timer state
 let timerInterval  = null;
 let timerRemaining = 0;
 const TIMED_SECS   = 30;
 
-// Blitz state
 let blitzInterval   = null;
-let blitzRemaining  = 300; // 5 min
+let blitzRemaining  = 300;
 let blitzAnswered   = 0;
 let blitzCorrect    = 0;
 const BLITZ_TOTAL   = 300;
 
-/* ============================================================
-   UTILS
-   ============================================================ */
 function shuffleArray(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -122,7 +112,6 @@ function updateTimerDisplay(val, total) {
 }
 
 function timeOut() {
-  // Treat as wrong answer
   streak = 0;
   updateStreak();
   answerEl.disabled = true;
@@ -136,7 +125,6 @@ function timeOut() {
   updateProgress();
   nextBtn.focus();
 
-  // Add visual "timeout" label
   feedback.querySelector('strong').textContent = '⏰ Temps écoulé !';
 }
 
@@ -244,10 +232,8 @@ async function handleFiles(fileList) {
   files.forEach(f => {
     const path  = f.webkitRelativePath || f.name;
     const parts = path.split('/').filter(Boolean);
-    const top   = parts.length > 1 ? parts[parts.length - 2] : null;
     const fname = parts[parts.length - 1];
-    const base  = fname.split('.')[0];
-    const key   = top || base;
+    const key   = fname.replace(/\.[^.]+$/, '');
     groups[key] = groups[key] || [];
     groups[key].push({ file: f, path });
   });
@@ -277,7 +263,7 @@ async function handleFiles(fileList) {
             });
             if (currentKey) L.json[currentKey] = currentValue.join('\n').trim();
           }
-        } catch (e) { /* silently skip */ }
+        } catch (e) { }
       } else if (lower.match(/\.(png|jpg|jpeg|gif|pdf)$/)) {
         const url = URL.createObjectURL(it.file);
         L.resources.push({ name: it.file.name, url, type: lower.endsWith('.pdf') ? 'pdf' : 'img' });
@@ -297,7 +283,7 @@ async function handleFiles(fileList) {
     setTimeout(() => {
       landingUI.classList.add('hidden');
       landingUI.classList.remove('fade-out');
-      openModeModal(true); // true = first launch
+      openModeModal(true);
     }, 400);
   } else {
     summary.textContent = "Aucun fichier valide trouvé. Vérifie les .json/.txt et .png/.pdf.";
@@ -306,7 +292,6 @@ async function handleFiles(fileList) {
 
 function openModeModal(firstLaunch = false) {
   modeModal.classList.remove('hidden');
-  // highlight current mode
   document.querySelectorAll('.mode-card').forEach(card => {
     card.classList.toggle('active', card.dataset.mode === currentMode);
   });
@@ -326,7 +311,6 @@ document.querySelectorAll('.mode-card').forEach(card => {
 
 changeModeBtn.addEventListener('click', () => openModeModal());
 
-// Blitz end actions
 document.getElementById('blitz-restart').addEventListener('click', () => {
   blitzEndModal.classList.add('hidden');
   launchMode();
@@ -337,11 +321,9 @@ document.getElementById('blitz-change-mode').addEventListener('click', () => {
 });
 
 function launchMode() {
-  // Show app UI (in case we're coming from landing)
   appUI.classList.remove('hidden');
   appUI.classList.add('fade-in');
 
-  // Reset common state
   shuffleArray(flatQuestions);
   currentIndex  = 0;
   answeredCount = 0;
@@ -349,11 +331,9 @@ function launchMode() {
   streak        = 0;
   updateStreak();
 
-  // Stop any running timers
   stopQuestionTimer();
   stopBlitz();
 
-  // Mode-specific UI
   const modeLabels = {
     classic:   '✍️ Classique',
     timed:     '⏱️ Contre la montre',
@@ -362,14 +342,12 @@ function launchMode() {
   };
   modeBadge.textContent = modeLabels[currentMode];
 
-  // Timer visibility
   if (currentMode === 'timed') {
     timerWrap.classList.remove('hidden');
   } else {
     timerWrap.classList.add('hidden');
   }
 
-  // Blitz bar
   if (currentMode === 'blitz') {
     blitzBarWrap.classList.remove('hidden');
     normalBarWrap.classList.add('hidden');
@@ -396,7 +374,6 @@ function showQuestion() {
 
   const q = flatQuestions[currentIndex];
 
-  // Preview
   preview.innerHTML = '';
   if (q.resources && q.resources.length > 0) {
     const r = q.resources[0];
@@ -425,7 +402,6 @@ function showQuestion() {
   skipBtn.hidden  = false;
   nextBtn.hidden  = true;
 
-  // Mode-specific zone
   if (currentMode === 'flashcard') {
     writeZone.classList.add('hidden');
     flashcardZone.classList.remove('hidden');
@@ -433,7 +409,6 @@ function showQuestion() {
     flashcardAns.textContent = q.value || '(Aucune réponse enregistrée)';
     revealBtn.classList.remove('hidden');
 
-    // Remove old self-eval if any
     document.querySelectorAll('.self-eval').forEach(el => el.remove());
 
     checkBtn.hidden = true;
@@ -447,7 +422,6 @@ function showQuestion() {
     answerEl.focus();
   }
 
-  // Start per-question timer
   if (currentMode === 'timed') {
     startQuestionTimer();
   }
@@ -457,7 +431,6 @@ revealBtn.addEventListener('click', () => {
   revealBtn.classList.add('hidden');
   flashcardAns.classList.remove('hidden');
 
-  // Self-evaluation buttons
   const selfEval = document.createElement('div');
   selfEval.className = 'self-eval';
   selfEval.innerHTML = `
@@ -555,7 +528,6 @@ document.getElementById('inspector-close').addEventListener('click', () => {
   inspectorModal.classList.add('hidden');
 });
 
-// Close modals on overlay click
 [confirmModal, inspectorModal, modeModal, blitzEndModal].forEach(modal => {
   modal.addEventListener('click', (e) => {
     if (e.target === modal) modal.classList.add('hidden');
